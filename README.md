@@ -1,8 +1,17 @@
 # dispipe
 
-Dispipe sends line input on named pipes to pre-configured Discord channels.
-Effectively, it lets you make write-only discord bots in shell script (or any
-arbitrary language) without needing a library!
+Dispipe sends line-based input on named pipes to pre-configured Discord
+channels. Effectively, it lets you make write-only discord bots using shell
+script, or any arbitrary language, without needing a library!
+
+## Building
+
+Built with rustc 1.45.0, earlier versions may not work. Depends on `serenity`,
+`nix`, and `rust-ini` packages.
+
+Compile with: `$ cargo build --release`
+
+You can find the binary at `target/release/dispipe`
 
 ## Usage
 
@@ -16,7 +25,7 @@ Send a message to a configured Discord channel:
 
 ## Configuration
 
-```
+```ini
 ; Config Structure
 ; 1. The 'Dispipe' section is mandatory, it specifies the root directory and discord bot token
 ; 2. All other sections are optional "fifo configs" that specify a fifo name and channel ID
