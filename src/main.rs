@@ -27,7 +27,7 @@ use serenity::{
 
 struct FifoConfig {
     section: String,       // Name of the config section
-    name: String,          // Name of the fifo created
+    fifo: String,          // File name of the FIFO created
     channel: u64           // Channel id where the message will be sent
 }
 
@@ -103,15 +103,15 @@ fn load_config(configuration_path: String) -> DispipeConfig
         let section_name = section_name.unwrap();
         if section_name != MAIN_CONFIG_SECTION {
 
-            // Get "name" and "channel" values
-            let name = get_required_property(properties, "name", section_name);
+            // Get "fifo" and "channel" values
+            let fifo = get_required_property(properties, "fifo", section_name);
             let channel = get_required_property(properties, "channel", section_name)
                 .parse::<u64>()
                 .expect("Channel should be an integer value");
 
             // Add config to struct
             fifo_configs.push(FifoConfig {
-                name: name,
+                fifo: fifo,
                 channel: channel,
                 section: section_name.to_string()
             });
@@ -132,7 +132,7 @@ fn validate_config(conf: &DispipeConfig) {
     assert!(root.is_absolute(), "root path must be absolute");
 
     for fifo_config in &conf.fifo_configs {
-        let path = Path::new(&conf.root).join(&fifo_config.name);
+        let path = Path::new(&conf.root).join(&fifo_config.fifo);
         let path_str = path.to_str().unwrap();
         if path.exists() {
             assert!(path_is_fifo(path_str), "File already exists at \"{}\". Please delete or move it.", path_str);
@@ -191,7 +191,7 @@ fn main() {
 
     for fifo_config in conf.fifo_configs
     {
-        let fifo_name = fifo_config.name.clone();
+        let fifo_name = fifo_config.fifo.clone();
         let section_name = fifo_config.section.clone();
         let fifo_path = Path::new(&conf.root).join(&fifo_name);
         let channel = fifo_config.channel;
