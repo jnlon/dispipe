@@ -201,7 +201,7 @@ fn main() {
         // If the file does not exist, make the fifo. We assume if a file exists it
         // must be a fifo, otherwise validate step would have failed.
         if !fifo_path.exists() {
-            unistd::mkfifo(&fifo_path, Mode::S_IRUSR | Mode::S_IWUSR)
+            unistd::mkfifo(&fifo_path, Mode::S_IRUSR | Mode::S_IWUSR | Mode::S_IWGRP)
                 .expect(format!("Error creating fifo at \"{}\"", &fifo_path_str).as_str());
         }
 
